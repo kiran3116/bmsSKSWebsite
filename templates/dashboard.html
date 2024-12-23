@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+  <style>
+    :root {
+      --bg-color-light: #f9fafb;
+      --text-color-light: #334e68;
+      --sidebar-bg-light: #e5e7eb;
+      --bg-color-dark: #1e293b;
+      --text-color-dark: #f9fafb;
+      --sidebar-bg-dark: #111827;
+      --primary-color: #3b82f6;
+      --button-hover-color: #2563eb;
+      --transition-speed: 0.3s;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+      background-color: var(--bg-color-light);
+      color: var(--text-color-light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Menu Button */
+    .menu-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 30px;
+      background: transparent;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+      z-index: 11;
+    }
+
+    /* Close Button in Sidebar */
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 24px;
+      background: transparent;
+      border: none;
+      color: var(--primary-color);
+      cursor: pointer;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px; /* Initially hidden */
+      width: 250px;
+      height: 100%;
+      background-color: var(--sidebar-bg-light);
+      color: var(--text-color-light);
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: left var(--transition-speed) ease-in-out;
+      z-index: 10;
+    }
+
+    .sidebar.active {
+      left: 0; /* Show sidebar */
+    }
+
+    .sidebar h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .sidebar img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: inherit;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color var(--transition-speed);
+      font-size: 16px;
+    }
+
+    .sidebar a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Theme toggle button */
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 10;
+      font-size: 16px;
+      transition: background-color var(--transition-speed);
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--button-hover-color);
+    }
+
+    /* Main Content Styles */
+    .main-content {
+      margin-left: 0;
+      padding: 20px;
+      max-width: 1000px;
+      max-height: 1300px;
+      width: 100%;
+      background-color: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      transition: margin-left var(--transition-speed) ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 1;
+    }
+
+    .main-content.shifted {
+      margin-left: 250px; /* Shift content when sidebar is active */
+    }
+
+    h1 {
+      font-size: 28px;
+      color: var(--text-color-light);
+    }
+
+    .button-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .button-container button {
+      padding: 15px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: var(--primary-color);
+      color: white;
+      cursor: pointer;
+      transition: transform var(--transition-speed), background-color var(--transition-speed);
+    }
+
+    .button-container button:hover {
+      background-color: var(--button-hover-color);
+      transform: scale(1.05);
+    }
+
+    /* Ensure content is readable in dark mode */
+    body.dark-mode {
+      background-color: var(--bg-color-dark);
+      color: var(--text-color-dark);
+    }
+
+    body.dark-mode .sidebar {
+      background-color: var(--sidebar-bg-dark);
+    }
+
+    body.dark-mode .main-content {
+      background-color: #222;
+      color: var(--text-color-dark);
+    }
+
+    body.dark-mode .sidebar a {
+      color: var(--text-color-dark);
+    }
+  </style>
+</head>
+<body>
+  <!-- Menu button -->
+  <button class="menu-btn">&#9776;</button>
+
+  <!-- Theme toggle button -->
+  <button class="theme-toggle">Toggle Theme</button>
+
+  <!-- Sidebar content -->
+  <div class="sidebar">
+    <button class="close-btn">&#10006;</button> <!-- Close button -->
+    <h2>{{ username }}</h2>
+    <p>{{ email }}</p>
+    <nav>
+      <ul id="sidebar-links">
+        <!-- Dynamic sidebar content will be inserted here -->
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Main content section -->
+  <div class="main-content">
+    <h1>Dashboard</h1>
+    <p>Select an option from the sidebar or use buttons to interact dynamically.</p>
+    <div class="button-container">
+      <button id="excelButton">Excel File</button>
+      <button id="GoogleButton">Google Sheet</button>
+    </div>
+  </div>
+
+  <script>
+   
+  const sidebar = document.querySelector('.sidebar');
+  const themeToggleButton = document.querySelector('.theme-toggle');
+  const mainContent = document.querySelector('.main-content');
+  const sidebarLinks = document.querySelector('#sidebar-links');
+  const excelButton = document.querySelector('#excelButton');
+  const googleButton = document.querySelector('#GoogleButton');
+  const menuBtn = document.querySelector('.menu-btn');
+  const closeBtn = document.querySelector('.close-btn');
+
+  // Sidebar links for Excel file and Google sheet
+  const excelLinks = `
+    <li><a href="/normal_sms">Normal SMS</a></li>
+    <li><a href="/excel">Excel SMS</a></li>
+    <li><a href="/advanced">Advanced SMS</a></li>
+    <li><a href="/contacts">Contact Us</a></li>
+    <li><a href="/profile">User Profile</a></li>
+    <li><a href="/settings">Settings</a></li>
+  `;
+  const googleLinks = `
+    <li><a href="/google_sms">Google SMS</a></li>
+    <li><a href="/google_column_sms">Google Column SMS</a></li>
+    <li><a href="/advanced_google">Advanced Google SMS</a></li>
+    <li><a href="/contacts">Contact Us</a></li>
+    <li><a href="/profile">User Profile</a></li>
+    <li><a href="/settings">Settings</a></li>
+  `;
+
+  // Initially hide the sidebar and content
+  document.addEventListener("DOMContentLoaded", () => {
+    sidebar.classList.remove('active');
+    mainContent.classList.remove('shifted');
+  });
+
+  // Reset sidebar to initial stage when single-clicked
+  let clickTimer;
+  menuBtn.addEventListener('click', () => {
+    if (clickTimer) {
+      clearTimeout(clickTimer);
+    }
+
+    // Single click (reset sidebar to initial state)
+    clickTimer = setTimeout(() => {
+      sidebarLinks.innerHTML = `
+        <li><a href="/contacts">Contact Us</a></li>
+        <li><a href="/profile">User Profile</a></li>
+        <li><a href="/settings">Settings</a></li>
+      `;
+      sidebar.classList.add('active');
+      mainContent.classList.add('shifted');
+    }, 200); // Wait 200ms to determine if it's a single click
+  });
+
+  // Double-click event to hide the sidebar and reset content to 'Dashboard'
+  menuBtn.addEventListener('dblclick', () => {
+    sidebar.classList.remove('active');
+    mainContent.classList.remove('shifted');
+    
+    // Reset main content header to Dashboard
+    mainContent.querySelector('h1').textContent = 'Dashboard';
+    mainContent.querySelector('p').textContent = 'Select an option from the sidebar or use buttons to interact dynamically.';
+  });
+
+  // Close button functionality to hide the sidebar and reset main content
+  closeBtn.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+    mainContent.classList.remove('shifted');
+    mainContent.querySelector('h1').textContent = 'Dashboard'; // Reset to initial title
+    mainContent.querySelector('p').textContent = 'Select an option from the sidebar or use buttons to interact dynamically.'; // Reset message
+  });
+
+  // Toggle theme between light and dark mode
+  themeToggleButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+  });
+
+  // Handle Excel button click
+  excelButton.addEventListener('click', () => {
+    sidebar.classList.add('active');
+    sidebarLinks.innerHTML = excelLinks; // Insert Excel related links
+    mainContent.querySelector('h1').textContent = 'Excel SMS Dashboard';
+  });
+
+  // Handle Google Sheet button click
+  googleButton.addEventListener('click', () => {
+    sidebar.classList.add('active');
+    sidebarLinks.innerHTML = googleLinks; // Insert Google Sheet related links
+    mainContent.querySelector('h1').textContent = 'Google Sheet SMS Dashboard';
+  });
+
+
+  </script>
+</body>
+</html>

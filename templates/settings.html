@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk SMS Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #666;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .switch {
+            display: flex;
+            align-items: center;
+        }
+        .switch input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Settings</h1>
+
+        <!-- General Settings -->
+        <div class="section">
+            <h2>General Settings</h2>
+            <div class="form-group">
+                <label for="default-sender-id">Default Sender ID</label>
+                <input type="text" id="default-sender-id" placeholder="Enter default sender ID">
+            </div>
+            <div class="form-group">
+                <label for="time-zone">Time Zone</label>
+                <select id="time-zone">
+                    <option value="UTC">UTC</option>
+                    <option value="PST">PST</option>
+                    <option value="EST">EST</option>
+                    <option value="IST">IST</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="language">Language Preference</label>
+                <select id="language">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SMS Configuration -->
+        <div class="section">
+            <h2>SMS Configuration</h2>
+            <div class="form-group">
+                <label for="message-templates">Message Templates</label>
+                <textarea id="message-templates" placeholder="Create or edit message templates here..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="default-signature">Default Message Signature</label>
+                <input type="text" id="default-signature" placeholder="Enter default signature">
+            </div>
+            <div class="form-group switch">
+                <input type="checkbox" id="unicode-support">
+                <label for="unicode-support">Enable Unicode Support</label>
+            </div>
+            <div class="form-group">
+                <label for="message-length">Message Length Counter</label>
+                <input type="text" id="message-length" placeholder="Message length and credits used" readonly>
+            </div>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="section">
+            <h2>Security Settings</h2>
+            <div class="form-group switch">
+                <input type="checkbox" id="enable-2fa">
+                <label for="enable-2fa">Enable Two-Factor Authentication</label>
+            </div>
+            <div class="form-group">
+                <label for="password">Change Password</label>
+                <input type="password" id="password" placeholder="Enter new password">
+            </div>
+        </div>
+
+        <!-- Notifications and Alerts -->
+        <div class="section">
+            <h2>Notifications and Alerts</h2>
+            <div class="form-group switch">
+                <input type="checkbox" id="email-alerts">
+                <label for="email-alerts">Enable Email Alerts</label>
+            </div>
+            <div class="form-group switch">
+                <input type="checkbox" id="sms-alerts">
+                <label for="sms-alerts">Enable SMS Alerts</label>
+            </div>
+        </div>
+
+        <button type="submit">Save Settings</button>
+    </div>
+
+    <script>
+        // Basic JavaScript for interactivity
+        document.getElementById('message-templates').addEventListener('input', function () {
+            const messageLength = this.value.length;
+            const creditsUsed = Math.ceil(messageLength / 160); // Assuming 160 chars per SMS
+            document.getElementById('message-length').value = `${messageLength} characters, ${creditsUsed} credits`;
+        });
+    </script>
+</body>
+</html>

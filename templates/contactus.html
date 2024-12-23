@@ -1,0 +1,64 @@
+<!-- contact_us.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='contactus.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Contact Us</h1>
+    <p>We're here to help! If you have any questions or feedback, feel free to get in touch with us.</p>
+    
+    <!-- Contact Form -->
+    <form action="/send_contact_form" method="POST" id="contact-form">
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Your Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" placeholder="Subject of your message" required>
+      </div>
+      <div class="form-group">
+        <label for="message">Your Message</label>
+        <textarea id="message" name="message" placeholder="Describe your issue or feedback" rows="6" required></textarea>
+      </div>
+      <button type="submit">Send Message</button>
+    </form>
+
+    <!-- Contact Information -->
+    <div class="contact-info">
+      <h2>Our Contact Details</h2>
+      <p><strong>Email:</strong> support@bulksmssender.com</p>
+      <p><strong>Phone:</strong> 9391495912</p>
+      <p><strong>Address:</strong> SMS Business, 123 Block,  Paradise , Secunderabad.</p>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq">
+      <h2>Frequently Asked Questions</h2>
+      <ul>
+        <li><strong>How do I send a bulk SMS?</strong> - Please refer to our <a href="/how-to-send-sms">guide</a> for step-by-step instructions.</li>
+        <li><strong>Can I upload a CSV for SMS?</strong> - Yes! You can upload a CSV file with contacts. Learn more <a href="/upload-instructions">here</a>.</li>
+        <li><strong>Do you offer customer support?</strong> - Yes, we provide 24/7 support through this contact form or live chat.</li>
+      </ul>
+    </div>
+
+    <!-- Social Media Links -->
+    <div class="social-media">
+      <h2>Follow Us</h2>
+      <a href="https://facebook.com/yourpage">Facebook</a>
+      <a href="https://twitter.com/yourpage">Twitter</a>
+      <a href="https://linkedin.com/company/yourpage">LinkedIn</a>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='contactus.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bulk SMS Sender</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+  <!-- Main content -->
+  <div class="main-container">
+    <!-- Background image with overlay -->
+    <div class="background-image">
+      <div class="overlay">
+        <!-- Header Section -->
+        <header>
+          <div class="logo-container">
+            <img src="https://res.cloudinary.com/dod61axze/image/upload/v1734167811/logobms_qctgez.png" alt="Logo" class="logo">
+          </div>
+          <nav>
+            {% if session['username'] %}
+              <a href="/logout" class="btn">Logout</a>
+            {% else %}
+              <a href="/login" class="btn">Login</a>
+            {% endif %}
+          </nav>
+        </header>
+
+        <!-- Content Section -->
+        <div class="content">
+          <h1>Welcome to Bulk SMS Sender</h1>
+          <p>Send bulk SMS messages effortlessly and efficiently. Ideal for businesses and personal use!</p>
+          <button class="get-started-btn" onclick="window.location.href='/dashboard'">Get Started</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
